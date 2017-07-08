@@ -1,0 +1,9 @@
+.Button-start {
+  background: rgba(0, 153, 51, 0.3);
+  color: #009933;
+}
+
+.Button-stop {
+  background: rgba(230, 46, 0, 0.2);
+  color: #e62e00;
+}

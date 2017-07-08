@@ -1,0 +1,25 @@
+.Panel {
+  height: 50vh;
+}
+
+.Panel-time-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Panel-time {
+  display: inline-block;
+  line-height: 30vh;
+  font-size: 84px;
+  width: 322px;
+  text-align: center;
+}
+
+.Panel-btn {
+  display: flex;
+  height: 20vh;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+}
