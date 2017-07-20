@@ -42,16 +42,18 @@ class Panel extends Component {
   }
 
   handleCountButtonClick() {
-    this.setState(prevState => {
-      if (!prevState.isInit && !prevState.isRunning) {
-        return {
+    if (!this.state.isInit) {
+      if (!this.state.isRunning) {
+        this.setState({
           isInit: true,
           lastTime: moment('00:00.00', FORMAT),
           pastTime: moment('00:00.00', FORMAT),
           tempTime: null,
-        };
+        });
       }
-    });
+      // push current time
+      this.props.onCountButtonClick(this.state.isRunning, this.state.pastTime);
+    }
   }
 
   timeLoop() {

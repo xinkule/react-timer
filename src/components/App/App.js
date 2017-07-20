@@ -6,8 +6,29 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentTime: '',
+      timeList: [],
     };
+
+    this.handleCountButtonClick = this.handleCountButtonClick.bind(this);
+  }
+
+  handleCountButtonClick(isRunning, countTime) {
+    if (isRunning) {
+      const formatTime = countTime.format('mm:ss.SS');
+
+      this.setState(prevState => {
+        prevState.timeList.unshift({
+          count: prevState.timeList.length + 1,
+          time: formatTime,
+        });
+
+        return {
+          timeList: prevState.timeList,
+        };
+      });
+    } else {
+      this.setState({ timeList: [] });
+    }
   }
 
   render() {
@@ -16,17 +37,15 @@ class App extends Component {
         <header id="header">
           React Timer
         </header>
-        <Panel />
+        <Panel onCountButtonClick={this.handleCountButtonClick} />
         <div id="result-wrapper">
           <ul className="list">
-            <li className="line">
-              <span className="count">count 1</span>
-              <span className="time">00:17.83</span>
-            </li>
-            <li className="line">
-              <span className="count">count 1</span>
-              <span className="time">00:17.83</span>
-            </li>
+            {this.state.timeList.map(row => (
+              <li className="line" key={row.count}>
+                <span className="count">count {row.count}</span>
+                <span className="time">{row.time}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
