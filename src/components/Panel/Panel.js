@@ -23,6 +23,19 @@ class Panel extends Component {
     this.handleCountButtonClick = this.handleCountButtonClick.bind(this);
   }
 
+  componentWillMount() {
+    if (window.localStorage.getItem('state')) {
+      const state = JSON.parse(window.localStorage.getItem('state'));
+
+      this.setState({
+        isInit: state.isInit,
+        isRunning: state.isRunning,
+        lastTime: moment(state.lastTime, FORMAT),
+        pastTime: moment(state.pastTime, FORMAT),
+      });
+    }
+  }
+
   handleStartButtonClick() {
     this.setState(prevState => ({
       tempTime: moment(),
@@ -36,6 +49,8 @@ class Panel extends Component {
         window.cancelAnimationFrame(animationId);
         this.setState({
           lastTime: this.state.pastTime,
+        }, () => {
+          this.saveToLocalStorage();
         });
       }
     });
@@ -49,6 +64,8 @@ class Panel extends Component {
           lastTime: moment('00:00.00', FORMAT),
           pastTime: moment('00:00.00', FORMAT),
           tempTime: null,
+        }, () => {
+          this.saveToLocalStorage();
         });
       }
       // push current time
@@ -66,6 +83,18 @@ class Panel extends Component {
     if (this.state.isRunning) {
       animationId = window.requestAnimationFrame(this.timeLoop.bind(this));
     }
+  }
+
+  saveToLocalStorage() {
+    // sync to local storage
+    const tempState = {
+      isInit: this.state.isInit,
+      isRunning: this.state.isRunning,
+      lastTime: this.state.lastTime.format(FORMAT),
+      pastTime: this.state.pastTime.format(FORMAT),
+    };
+
+    window.localStorage.setItem('state', JSON.stringify(tempState));
   }
 
   render() {

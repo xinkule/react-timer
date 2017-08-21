@@ -12,6 +12,19 @@ class App extends Component {
     this.handleCountButtonClick = this.handleCountButtonClick.bind(this);
   }
 
+  componentWillMount() {
+    if (window.localStorage.getItem('timeList')) {
+      this.setState({
+        timeList: JSON.parse(window.localStorage.getItem('timeList')),
+      });
+    }
+  }
+
+  componentDidUpdate() {
+    // sync to local storage
+    window.localStorage.setItem('timeList', JSON.stringify(this.state.timeList));
+  }
+
   handleCountButtonClick(isRunning, countTime) {
     if (isRunning) {
       const formatTime = countTime.format('mm:ss.SS');
