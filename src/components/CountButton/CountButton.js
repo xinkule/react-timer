@@ -2,14 +2,9 @@ import React, { Component } from 'react';
 import './CountButton.css';
 
 class CountButton extends Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
+  handleClick = () => {
     this.props.onCountButtonClick();
-  }
+  };
 
   render() {
     return (
@@ -17,7 +12,7 @@ class CountButton extends Component {
         className={`btn Button-${!this.props.isInit && 'count'}`}
         onClick={this.handleClick}
       >
-        {this.props.isInit ? 'count' : (this.props.isRunning ? 'count' : 'reset')}
+        {this.props.isInit ? 'count' : this.props.isRunning ? 'count' : 'reset'}
       </span>
     );
   }

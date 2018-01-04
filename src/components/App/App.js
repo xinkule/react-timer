@@ -1,59 +1,32 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 import './App.css';
 import Panel from '../Panel/Panel';
+import AppStore from '../../model/AppStore';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      timeList: [],
-    };
-
-    this.handleCountButtonClick = this.handleCountButtonClick.bind(this);
+    this.store = new AppStore();
   }
 
-  componentWillMount() {
-    if (window.localStorage.getItem('timeList')) {
-      this.setState({
-        timeList: JSON.parse(window.localStorage.getItem('timeList')),
-      });
-    }
-  }
-
-  componentDidUpdate() {
-    // sync to local storage
-    window.localStorage.setItem('timeList', JSON.stringify(this.state.timeList));
-  }
-
-  handleCountButtonClick(isRunning, countTime) {
+  handleCountButtonClick = (isRunning, countTime) => {
     if (isRunning) {
       const formatTime = countTime.format('mm:ss.SS');
-
-      this.setState(prevState => {
-        prevState.timeList.unshift({
-          count: prevState.timeList.length + 1,
-          time: formatTime,
-        });
-
-        return {
-          timeList: prevState.timeList,
-        };
-      });
+      this.store.addItem(formatTime);
     } else {
-      this.setState({ timeList: [] });
+      this.store.empty();
     }
-  }
+  };
 
   render() {
     return (
       <div id="App">
-        <header id="header">
-          React Timer
-        </header>
+        <header id="header">React Timer</header>
         <Panel onCountButtonClick={this.handleCountButtonClick} />
         <div id="result-wrapper">
           <ul className="list">
-            {this.state.timeList.map(row => (
+            {this.store.timeList.map(row => (
               <li className="line" key={row.count}>
                 <span className="count">count {row.count}</span>
                 <span className="time">{row.time}</span>
@@ -66,4 +39,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default observer(App);
